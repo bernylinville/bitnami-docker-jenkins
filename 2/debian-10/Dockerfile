@@ -15,8 +15,10 @@ RUN bitnami-pkg install git-2.29.2-0 --checksum aebe650c294f00bacd383f90db2bbf50
 RUN bitnami-pkg install tini-0.19.0-1 --checksum 9b1f1c095944bac88a62c1b63f3bff1bb123aa7ccd371c908c0e5b41cec2528d
 RUN bitnami-pkg unpack jenkins-2.263.1-0 --checksum ed5e58601f96e6204658959d085d161faaeb08dca3505a65845b0f6e856e51e8
 RUN bitnami-pkg install gosu-1.12.0-2 --checksum 4d858ac600c38af8de454c27b7f65c0074ec3069880cb16d259a6e40a46bbc50
-RUN apt-get update && apt-get upgrade -y && \
-    rm -r /var/lib/apt/lists /var/cache/apt/archives
+RUN apt-get update && apt-get upgrade -y && apt install gnupg maven -y && \
+    echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" > /etc/apt/sources.list.d/ansible.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 && \
+    apt install ansible -y && rm -r /var/lib/apt/lists /var/cache/apt/archives
 RUN mkdir -p /usr/share/jenkins/ref
 
 COPY rootfs /
